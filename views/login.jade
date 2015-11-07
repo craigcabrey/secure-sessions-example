@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  p Two users are available: 'bob' and 'alice'. The password for both is 'password' (without quotes).
+  form( method="post")
+    label Username 
+    input(type="text", name="user", id='user-tf')
+    label Password
+    input(type="password", name="password", id='pass-tf')
+    button(type="submit")
+      | Sign in

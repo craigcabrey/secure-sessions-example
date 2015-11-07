@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1 Tasks
+  if (role !== 'guest')
+    ul
+      each val in tasks.length ? tasks : ['There are no tasks']
+        li= val.body
+
+    if (role === 'editor')
+      form(method="post")
+          label Task
+          input(type="text", name="body")
+          button(type="submit")
+              | Submit
+  else
+    p You are not logged in. Login to see tasks.

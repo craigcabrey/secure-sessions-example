@@ -8,6 +8,32 @@ var bodyParser = require('body-parser');
 var cookies = require('./cookies');
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var tasks = require('./routes/tasks');
+
+var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database(':memory:');
+
+db.serialize(function() {
+  db.run(
+    "create table if not exists users(id integer primary key autoincrement," +
+    "user varchar, password varchar, role varchar)"
+  );
+  db.run(
+    "create table if not exists sessions(id text, user_id int)"
+  );
+  db.run(
+    "create table if not exists tasks(id integer primary key autoincrement," +
+    "body text)"
+  );
+
+  db.run(
+    "insert into users (user, password, role) values('bob', 'password', 'viewer')"
+  );
+  db.run(
+    "insert into users (user, password, role) values('alice', 'password', 'editor')"
+  );
+  db.run("insert into tasks (body) values('do swen-755 assignment')");
+});
 
 var app = express();
 
@@ -22,10 +48,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cookies());
 
+app.use(function(req, res, next) {
+  req.db = db;
+  next();
+});
+
+app.use(cookies());
 app.use('/', routes);
 app.use('/users', users);
+app.use('/tasks', tasks);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
