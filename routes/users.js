@@ -29,4 +29,10 @@ router.post('/login', function(req, res, next) {
   });
 });
 
+router.get('/logout', function(req, res, next) {
+  req.db.run("delete from sessions where id='" + req.cookies.id + "'");
+  res.clearCookie('id');
+  res.redirect('/');
+});
+
 module.exports = router;
