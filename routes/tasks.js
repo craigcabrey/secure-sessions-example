@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
   if (req.user) {
     role = req.user.role;
   }
-  req.db.all('SELECT * from tasks', function(err, rows) {
+  req.db.all('select * from tasks', function(err, rows) {
     if (err) {
       res.send('oops, something went wrong');
     } else {

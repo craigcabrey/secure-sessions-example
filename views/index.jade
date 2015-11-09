@@ -3,8 +3,9 @@ extends layout
 block content
   h1= title
   p This application demonstrates basic session management by implementing a simple task list.
-  a(href="/users/login") Login
-  br
-  a(href="/users/logout") Logout
+  if (user)
+    a(href="/users/logout") Logout
+  else
+    a(href="/users/login") Login
   br
   a(href="/tasks") Tasks

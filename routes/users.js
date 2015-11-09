@@ -1,14 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  req.db.each('SELECT user from users', function(err, row) {
-    console.log(row);
-  });
-  res.send('respond with a resource');
-});
-
 router.get('/login', function(req, res, next) {
   res.render('login');
 });
@@ -20,7 +12,7 @@ router.post('/login', function(req, res, next) {
       } else {
         if (req.body.password === row.password) {
           req.db.run("insert into sessions (id, user_id) values('" + 
-            req.cookies.id + "', '" + row.id + "')");
+            req.session.id + "', '" + row.id + "')");
           res.redirect('/');
         } else {
           res.send('invalid username and/or password');
@@ -30,9 +22,9 @@ router.post('/login', function(req, res, next) {
 });
 
 router.get('/logout', function(req, res, next) {
-  req.db.run("delete from sessions where id='" + req.cookies.id + "'");
-  res.clearCookie('id');
-  res.redirect('/');
+  req.db.run("delete from sessions where id='" + req.session.id + "'");
+  req.session.destroy();
+  res.send('logged out');
 });
 
 module.exports = router;
