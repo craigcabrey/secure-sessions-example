@@ -3,6 +3,7 @@ extends layout
 block content
   h1= title
   p This application demonstrates basic session management by implementing a simple task list.
+  p Your client identifier: #{id}
   if (user)
     a(href="/users/logout") Logout
   else
