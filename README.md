@@ -14,3 +14,8 @@ to interact with the application.
 
 Note that the application demonstrates session management only. It is not intended
 to demonstrate security practices.
+
+## Test
+
+To execute the test cases, run `npm test`.
+
